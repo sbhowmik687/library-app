@@ -27,7 +27,7 @@ public class Book implements Serializable {
 	@Column(nullable = false)
 	private Integer pages;
 
-	protected Book() {
+	public Book() {
 	}
 
 	public Book(String isbn, String title, String publisher, String cover, Integer pages) {

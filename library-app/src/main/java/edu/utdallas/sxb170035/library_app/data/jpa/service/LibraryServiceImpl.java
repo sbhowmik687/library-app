@@ -1,8 +1,8 @@
 package edu.utdallas.sxb170035.library_app.data.jpa.service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import org.springframework.util.Assert;
 import edu.utdallas.sxb170035.library_app.data.jpa.domain.Book;
 import edu.utdallas.sxb170035.library_app.data.jpa.domain.BookLoan;
 import edu.utdallas.sxb170035.library_app.data.jpa.domain.Borrower;
+import edu.utdallas.sxb170035.library_app.data.jpa.domain.Fines;
 import edu.utdallas.sxb170035.library_app.data.jpa.vo.BorrowerVO;
 
 @Component("libraryService")
@@ -28,13 +30,15 @@ class LibraryServiceImpl implements LibaryService {
 	private final BookRepository bookRepository;
 	private final BorrowerRepository borrowerRepository;
 	private final LoanRepository loanRepository;
+	private final FineRepository fineRepository;
 
 	@Autowired
 	public LibraryServiceImpl(BookRepository bookRepository, BorrowerRepository borrowerRepository,
-			LoanRepository loanRepository) {
+			LoanRepository loanRepository, FineRepository fineRepository) {
 		this.bookRepository = bookRepository;
 		this.borrowerRepository = borrowerRepository;
 		this.loanRepository = loanRepository;
+		this.fineRepository = fineRepository;
 	}
 
 	@Override
@@ -106,4 +110,55 @@ class LibraryServiceImpl implements LibaryService {
 		else
 			return true;
 	}
+
+	@Override
+	public void calculateFine() {
+		double fineAmt = 0.00f;
+		List<Object[]> resultList = this.loanRepository.findAll();
+		List<Fines> finesList = new ArrayList<Fines>();
+		for (Object[] resObj : resultList) {
+			Date due_date = null;
+			Date date_out = null;
+			Date date_in = null;
+			String dateIn = (String) resObj[3];
+			String dueDate = (String) resObj[4];
+			String dateOut = (String) resObj[5];
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+			try {
+				due_date = sdf.parse(dueDate);
+				date_out = sdf.parse(dateOut);
+				date_in = sdf.parse(dateOut);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (null == dateIn) {
+				int daysOut = calculateDaysOut(due_date, date_out);
+				if (daysOut > 14) {
+					fineAmt = (calculateDaysOut(due_date, new Date()) - 14) * 0.25;
+				}
+			} else {
+				if (calculateDaysOut(date_in, date_out) > 14) {
+					fineAmt = (calculateDaysOut(date_in, date_out) - 14) * 0.25;
+				}
+			}
+			Fines fines = new Fines(null, (float) fineAmt, false);
+			finesList.add(fines);
+		}
+		fineRepository.saveAll(finesList);
+	}
+
+	private int calculateDaysOut(Date date1, Date date2) {
+		return (int) TimeUnit.DAYS.convert(date2.getTime() - date1.getTime(), TimeUnit.MILLISECONDS);
+
+	}
+
+	@Override
+	public void updateFine(String loanId) {
+		Fines fines=fineRepository.findByLoanId(loanId);
+		fines.setPaid(true);
+		fineRepository.save(fines);
+		
+	}
+
 }

@@ -27,23 +27,39 @@ public class LibraryController {
 	@RequestMapping("/getBooks/{queryString}")
 	@ResponseBody
 	@Transactional(readOnly = true)
-	public List<Map<String,String>> getBooks(@PathVariable("queryString") String queryString) {
+	public List<Map<String, String>> getBooks(@PathVariable("queryString") String queryString) {
 		return this.libraryService.getBookDetails(queryString);
 	}
-	
+
 	@RequestMapping("/checkout/{bookId}")
 	@ResponseBody
 	@Transactional(readOnly = false)
-	public BookLoan checkOut(@PathVariable("bookId") String bookId,@RequestParam(value = "cardId", required = true) String cardId) {
-		return this.libraryService.checkOut(bookId,cardId);
+	public BookLoan checkOut(@PathVariable("bookId") String bookId,
+			@RequestParam(value = "cardId", required = true) String cardId) {
+		return this.libraryService.checkOut(bookId, cardId);
 	}
-	
-	@RequestMapping(value="/createBorrower", method = RequestMethod.POST)
+
+	@RequestMapping(value = "/createBorrower", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	@Transactional(readOnly = false)
 	public void createBorrower(@RequestBody BorrowerVO borrowerVO) {
-		
+
 		this.libraryService.createUser(borrowerVO);
 	}
-}
 
+	@RequestMapping("/calculateFine")
+	@ResponseBody
+	@Transactional(readOnly = false)
+	public void calculateFines() {
+
+		this.libraryService.calculateFine();
+	}
+	
+	@RequestMapping("/updateFine/{loanId}")
+	@ResponseBody
+	@Transactional(readOnly = false)
+	public void updateFines(@PathVariable("cardId") String cardId) {
+
+		this.libraryService.updateFine(cardId);
+	}
+}

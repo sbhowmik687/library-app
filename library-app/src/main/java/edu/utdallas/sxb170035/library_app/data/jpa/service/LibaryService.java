@@ -14,5 +14,9 @@ public interface LibaryService {
 	public BookLoan checkOut(String isbn,String cardId);
 
 	void createUser(BorrowerVO borrowerVO);
+
+	void calculateFine();
+
+	void updateFine(String loanId);
 	
 }

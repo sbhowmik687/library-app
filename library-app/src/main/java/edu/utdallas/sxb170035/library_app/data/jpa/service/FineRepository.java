@@ -15,7 +15,7 @@ import edu.utdallas.sxb170035.library_app.data.jpa.domain.Fines;
 interface FineRepository extends Repository<Fines, Long> {
 	
 
-	List<Fines> saveAll(List<Fines> finesList);
+	//List<Fines> saveAll(List<Fines> finesList);
 	Fines findByLoanId(String loanId);
 	Fines save(Fines fines);
 }

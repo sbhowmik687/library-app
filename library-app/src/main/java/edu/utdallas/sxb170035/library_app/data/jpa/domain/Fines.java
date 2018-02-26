@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -14,6 +15,9 @@ public class Fines implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue
+	Long id;
+
 	@OneToOne(optional = false)
 	@JoinColumn(name = "loan_id")
 	private BookLoan loanId;
@@ -25,12 +29,22 @@ public class Fines implements Serializable {
 
 	public Fines() {
 	}
+
 	public Fines(BookLoan loanId, float fineAmt, boolean paid) {
 		super();
 		this.loanId = loanId;
 		this.fineAmt = fineAmt;
 		this.paid = paid;
 	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
 	public BookLoan getLoanId() {
 		return loanId;
 	}

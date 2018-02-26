@@ -46,16 +46,17 @@ class LibraryServiceImpl implements LibaryService {
 		Assert.notNull(queryString, "QueryString must not be null");
 		List<Object[]> resultList = this.bookRepository.findBookandAuthor(queryString);
 		List<Map<String, String>> returnList = new ArrayList<Map<String, String>>();
+		Map<String, String> map = null;
 		if (null == resultList || resultList.isEmpty()) {
 			return new ArrayList();
 		} else {
-			Map<String, String> map = new HashMap<String, String>();
 			Set<String> hashSet = new HashSet<String>();
 			for (Object[] resObj : resultList) {
 				String isbn = (String) resObj[0];
 				String title = (String) resObj[1];
 				String author = (String) resObj[2];
 				if (hashSet.add(isbn)) {
+					map = new HashMap<String, String>();
 					map.put("isbn", isbn);
 					map.put("title", title);
 					map.put("author", author);
@@ -145,7 +146,7 @@ class LibraryServiceImpl implements LibaryService {
 			Fines fines = new Fines(null, (float) fineAmt, false);
 			finesList.add(fines);
 		}
-		fineRepository.saveAll(finesList);
+		//fineRepository.saveAll(finesList);
 	}
 
 	private int calculateDaysOut(Date date1, Date date2) {

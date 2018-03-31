@@ -76,9 +76,10 @@ class LibraryServiceImpl implements LibaryService {
 					returnList.add(map);
 
 				} else {
-					String authorAppend = returnList.get(returnList.size() - 1).get("author");
-					authorAppend = authorAppend + " , " + author;
-					returnList.get(returnList.size() - 1).put("author", authorAppend);
+					StringBuffer authorAppend = new StringBuffer(returnList.get(returnList.size() - 1).get("author"));
+					authorAppend.append(",");
+					authorAppend.append(author);
+					returnList.get(returnList.size() - 1).put("author", authorAppend.toString());
 
 				}
 			}

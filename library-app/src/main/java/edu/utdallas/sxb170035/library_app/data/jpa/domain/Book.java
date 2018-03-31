@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
@@ -26,17 +25,21 @@ public class Book implements Serializable {
 
 	@Column(nullable = false)
 	private Integer pages;
+	
+	@Column(name="IS_CHECKED_OUT",nullable = false)
+	private boolean isCheckedOut;
 
 	public Book() {
 	}
 
-	public Book(String isbn, String title, String publisher, String cover, Integer pages) {
+	public Book(String isbn, String title, String publisher, String cover, Integer pages,boolean isCheckedOut) {
 		super();
 		this.isbn = isbn;
 		this.title = title;
 		this.publisher = publisher;
 		this.cover = cover;
 		this.pages = pages;
+		this.isCheckedOut=isCheckedOut;
 	}
 
 	public static long getSerialversionuid() {
@@ -61,6 +64,14 @@ public class Book implements Serializable {
 
 	public Integer getPages() {
 		return pages;
+	}
+
+	public boolean isCheckedOut() {
+		return isCheckedOut;
+	}
+
+	public void setCheckedOut(boolean isCheckedOut) {
+		this.isCheckedOut = isCheckedOut;
 	}
 
 	@Override

@@ -4,7 +4,9 @@ public class BorrowerVO {
 
 	private String ssn;
 
-	private String bname;
+	private String firstName;
+	
+	private String lastName;
 
 	private String address;
 
@@ -21,26 +23,19 @@ public class BorrowerVO {
 	public BorrowerVO() {
 	}
 
-	public BorrowerVO(String ssn, String bname, String address, String city, String state, String phone) {
+	public BorrowerVO(String ssn, String bname,String lname, String address, String city, String state, String phone) {
 		super();
 		this.ssn = ssn;
-		this.bname = bname;
+		this.firstName = bname;
 		this.address = address;
 		this.city = city;
 		this.state = state;
 		this.phone = phone;
+		this.lastName=lname;
 	}
 
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
-	}
-
-	public String getBname() {
-		return bname;
-	}
-
-	public void setBname(String bname) {
-		this.bname = bname;
 	}
 
 	public String getAddress() {
@@ -74,4 +69,21 @@ public class BorrowerVO {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
 }

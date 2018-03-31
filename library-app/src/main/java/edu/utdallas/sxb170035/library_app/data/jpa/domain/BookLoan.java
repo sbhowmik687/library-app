@@ -1,20 +1,13 @@
 package edu.utdallas.sxb170035.library_app.data.jpa.domain;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.springframework.util.Assert;
 
 @Entity
 public class BookLoan implements Serializable {
@@ -30,10 +23,10 @@ public class BookLoan implements Serializable {
 	private Book book;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "card_id", nullable = false)
+	@JoinColumn(name = "card_id", nullable = true)
 	private Borrower cardId;
 
-	@Column(name = "date_out", nullable = true)
+	@Column(name = "date_out", nullable = false)
 	private String dateOut;
 
 	@Column(name = "due_date", nullable = false)
@@ -80,6 +73,30 @@ public class BookLoan implements Serializable {
 
 	public String getDateIn() {
 		return dateIn;
+	}
+
+	public void setLoan_id(Long loan_id) {
+		this.loan_id = loan_id;
+	}
+
+	public void setBook(Book book) {
+		this.book = book;
+	}
+
+	public void setCardId(Borrower cardId) {
+		this.cardId = cardId;
+	}
+
+	public void setDateOut(String dateOut) {
+		this.dateOut = dateOut;
+	}
+
+	public void setDueDate(String dueDate) {
+		this.dueDate = dueDate;
+	}
+
+	public void setDateIn(String dateIn) {
+		this.dateIn = dateIn;
 	}
 
 	@Override

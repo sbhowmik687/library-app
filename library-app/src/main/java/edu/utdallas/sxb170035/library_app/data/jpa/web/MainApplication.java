@@ -1,4 +1,4 @@
-package edu.utdallas.sxb170035.library_app.data.jpa;
+package edu.utdallas.sxb170035.library_app.data.jpa.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

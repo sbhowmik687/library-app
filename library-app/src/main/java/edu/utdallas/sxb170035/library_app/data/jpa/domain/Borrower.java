@@ -12,25 +12,33 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.util.Assert;
 
 @Entity
+@Table(name = "borrowers")
 public class Borrower implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE)
+	@GenericGenerator(name = "sequence_brw_id", strategy = "edu.utdallas.sxb170035.library_app.data.jpa.service.BorrowerIdentifier")
+	@GeneratedValue(generator = "sequence_brw_id")  
 	private String cardId;
 
 	@Column(name = "ssn", nullable = false)
 	private String ssn;
 
-	@Column(name = "bname", nullable = false)
+	@Column(name = "lname", nullable = false)
 	private String bname;
+	
+	@Column(name = "fname", nullable = false)
+	private String fname;
 
 	@Column(name = "address", nullable = false)
 	private String address;
@@ -47,7 +55,7 @@ public class Borrower implements Serializable {
 	public Borrower() {
 	}
 
-	public Borrower(String ssn, String bname, String address, String city, String state, String phone) {
+	public Borrower(String ssn, String bname, String fname,String address, String city, String state, String phone) {
 		super();
 		this.ssn = ssn;
 		this.bname = bname;
@@ -55,6 +63,7 @@ public class Borrower implements Serializable {
 		this.city = city;
 		this.state = state;
 		this.phone = phone;
+		this.fname=fname;
 	}
 
 	public String getCity() {
@@ -87,6 +96,10 @@ public class Borrower implements Serializable {
 
 	public String getPhone() {
 		return phone;
+	}
+
+	public String getFname() {
+		return fname;
 	}
 
 	@Override

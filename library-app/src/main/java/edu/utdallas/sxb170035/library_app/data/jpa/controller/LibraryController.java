@@ -3,6 +3,8 @@ package edu.utdallas.sxb170035.library_app.data.jpa.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +31,6 @@ public class LibraryController {
 
 	@Autowired
 	private LibaryService libraryService;
-	
-	@Autowired
-	private ResponseBuilder responseBuilder;
 
 	@CrossOrigin
 	@GetMapping("/getBooks/{bookId}")
@@ -55,11 +54,7 @@ public class LibraryController {
 	public ResponseEntity<BookLoan> checkOut(String bookId,
 			@RequestParam(value = "cardId", required = true) String cardId) {
 		BookLoan object = this.libraryService.checkOut(bookId, cardId);
-		if (null != object) {
-			return responseBuilder.buildSucessResponse(object);
-		} else {
-			return new ResponseEntity<>(object, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return new ResponseEntity<>(object, HttpStatus.OK);
 
 	}
 	@CrossOrigin
@@ -69,18 +64,15 @@ public class LibraryController {
 	public BookLoan checkIn(String bookId) {
 		return this.libraryService.checkIn(bookId);
 	}
-	@CrossOrigin(origins = "http://localhost:8080")
+	@CrossOrigin
 	@PostMapping(value = "/createBorrower", headers = "Accept=application/json")
 	@ResponseBody
 	@Transactional(readOnly = false)
-	public ResponseEntity<Borrower> createBorrower(@RequestBody BorrowerVO borrowerVO) {
+	public ResponseEntity<Borrower> createBorrower(@Valid @RequestBody BorrowerVO borrowerVO) {
 
 		Borrower object=this.libraryService.createUser(borrowerVO);
-		if (null != object) {
-			return new ResponseEntity<>(object, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(object, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return new ResponseEntity<>(object, HttpStatus.OK);
+		
 	}
 
 	@CrossOrigin

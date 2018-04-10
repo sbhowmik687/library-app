@@ -1,19 +1,28 @@
 package edu.utdallas.sxb170035.library_app.data.jpa.vo;
 
+import javax.validation.constraints.NotNull;
+
 public class BorrowerVO {
 
+	@NotNull(message = "ssn name can not be null.")
 	private String ssn;
 
+	@NotNull(message = "first name can not be null.")
 	private String firstName;
 	
+	@NotNull(message = "last name can not be null.")
 	private String lastName;
 
+	@NotNull(message = "address name can not be null.")
 	private String address;
 
+	@NotNull(message = "city name can not be null.")
 	private String city;
 
+	@NotNull(message = "state name can not be null.")
 	private String state;
 
+	@NotNull(message = "phone number can not be null.")
 	private String phone;
 
 	public String getSsn() {

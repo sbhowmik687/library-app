@@ -26,6 +26,7 @@ import edu.utdallas.sxb170035.library_app.data.jpa.repository.BorrowerRepository
 import edu.utdallas.sxb170035.library_app.data.jpa.repository.FineRepository;
 import edu.utdallas.sxb170035.library_app.data.jpa.repository.LoanRepository;
 import edu.utdallas.sxb170035.library_app.data.jpa.vo.BorrowerVO;
+import edu.utdallas.sxb170035.library_app.data.jpa.controller.exception.ApplicationException;
 
 
 @Component("libraryService")
@@ -53,7 +54,7 @@ class LibraryServiceImpl implements LibaryService {
 		List<Map<String, String>> returnList = new ArrayList<Map<String, String>>();
 		Map<String, String> map = null;
 		if (null == resultList || resultList.isEmpty()) {
-			return new ArrayList();
+			throw new ApplicationException("500", "Book not found");
 		} else {
 			Set<String> hashSet = new HashSet<String>();
 			for (Object[] resObj : resultList) {
@@ -95,7 +96,7 @@ class LibraryServiceImpl implements LibaryService {
 		List<Map<String, String>> returnList = new ArrayList<Map<String, String>>();
 		Map<String, String> map = null;
 		if (null == resultList || resultList.isEmpty()) {
-			return new ArrayList();
+			throw new ApplicationException("500", "Book not found");
 		} else {
 			for (Object[] resObj : resultList) {
 				String isbn = (String) resObj[0];
@@ -138,7 +139,10 @@ class LibraryServiceImpl implements LibaryService {
 			bookRepository.save(book);
 			return this.loanRepository.save(entity);
 		}
-		return null;
+		else
+		{
+			throw new ApplicationException("500", "User not allowed to check out more books");
+		}
 	}
 	@Override
 	public BookLoan checkIn(String isbn) {
@@ -166,7 +170,10 @@ class LibraryServiceImpl implements LibaryService {
 					borrowerVO.getCity(), borrowerVO.getState(), borrowerVO.getPhone());
 			return this.borrowerRepository.save(newBorrower);
 		}
-		return null;
+		else
+		{
+			throw new ApplicationException("500", "Error in creating user.");
+		}
 
 	}
 
@@ -238,7 +245,7 @@ class LibraryServiceImpl implements LibaryService {
 		Borrower borrower = borrowerRepository.findByCardId(cardId);
 		List<Object> resultList = loanRepository.findByCardId(borrower);
 		if (null == resultList || resultList.isEmpty()) {
-			return null;
+			throw new ApplicationException("500", "Card Id not found");
 		} else {
 			for (Object resObj : resultList) {
 				BookLoan loan = (BookLoan) resObj;
@@ -258,7 +265,7 @@ class LibraryServiceImpl implements LibaryService {
 		List<Map<String, String>> returnList = new ArrayList<Map<String, String>>();
 		Map<String, String> map = null;
 		if (null == resultList || resultList.isEmpty()) {
-			return new ArrayList<Map<String, String>>();
+			throw new ApplicationException("500", "No fines found");
 		} else {
 			for (Object[] resObj : resultList) {
 				Borrower borower = (Borrower) resObj[0];
